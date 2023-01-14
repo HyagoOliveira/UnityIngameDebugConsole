@@ -904,8 +904,7 @@ namespace IngameDebugConsole
 
             isLogWindowVisible = true;
 
-            if (OnLogWindowShown != null)
-                OnLogWindowShown();
+            OnLogWindowShown?.Invoke();
         }
 
         public void HideLogWindow()
@@ -921,8 +920,7 @@ namespace IngameDebugConsole
 
             isLogWindowVisible = false;
 
-            if (OnLogWindowHidden != null)
-                OnLogWindowHidden();
+            OnLogWindowHidden?.Invoke();
         }
 
         // Command field input is changed, check if command is submitted
