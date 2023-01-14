@@ -605,9 +605,9 @@ namespace IngameDebugConsole
         private void Start()
         {
             if ((enablePopup && startInPopupMode) || (!enablePopup && startMinimized))
-                HideLogWindow();
+                HideLogWindowWithoutInvokeOnLogWindowHidden();
             else
-                ShowLogWindow();
+                ShowLogWindowWithoutInvokeOnLogWindowShown();
 
             PopupEnabled = enablePopup;
         }
@@ -877,6 +877,12 @@ namespace IngameDebugConsole
 
         public void ShowLogWindow()
         {
+            ShowLogWindowWithoutInvokeOnLogWindowShown();
+            OnLogWindowShown?.Invoke();
+        }
+
+        private void ShowLogWindowWithoutInvokeOnLogWindowShown()
+        {
             // Show the log window
             logWindowCanvasGroup.blocksRaycasts = true;
             logWindowCanvasGroup.alpha = 1f;
@@ -903,11 +909,15 @@ namespace IngameDebugConsole
             }
 
             isLogWindowVisible = true;
-
-            OnLogWindowShown?.Invoke();
         }
 
         public void HideLogWindow()
+        {
+            HideLogWindowWithoutInvokeOnLogWindowHidden();
+            OnLogWindowHidden?.Invoke();
+        }
+
+        private void HideLogWindowWithoutInvokeOnLogWindowHidden()
         {
             // Hide the log window
             logWindowCanvasGroup.blocksRaycasts = false;
@@ -919,8 +929,6 @@ namespace IngameDebugConsole
             popupManager.Show();
 
             isLogWindowVisible = false;
-
-            OnLogWindowHidden?.Invoke();
         }
 
         // Command field input is changed, check if command is submitted
